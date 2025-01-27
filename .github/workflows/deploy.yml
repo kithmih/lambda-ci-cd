@@ -42,6 +42,7 @@ jobs:
       - name: Deploy SAM application
         run: |
           sam deploy --no-confirm-changeset \
+            --template-file sam/template.yml \
             --stack-name lambda-sam-stack \
             --capabilities CAPABILITY_IAM \
             --region ${{ secrets.AWS_REGION }}
