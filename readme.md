@@ -5,6 +5,9 @@ Creating CI/CD pipeline to automate the process of deploying Lambda Functions.
 1. Deploying the Lambda Function code when it changes.
 2. Updating the Lamda Layer when dependencies (package-lock.json) change.
 
+
+Setting up automation with GitHub Actions, AWS SAM, and Lambda to make the deployment smooth and efficient.
+
 ## After Deployment
 
 ### 1. Check the Stack in AWS CloudFormation
@@ -56,4 +59,3 @@ Creating CI/CD pipeline to automate the process of deploying Lambda Functions.
 * Select the function.
 * Use the "Test" button to invoke it with sample input.
 * Review the executio resut and logs.
-
