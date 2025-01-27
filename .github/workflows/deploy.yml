@@ -1,0 +1,51 @@
+name: Deploy Lambda Functions
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-lambda:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Ensure AWS CLI is installed
+        run: aws --version
+
+      - name: Detect dependency changes
+        id: check-dependency-changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -e "function/package-lock.json" -e "layer/nodejs/package-lock.json"; then
+              echo "update_layer=true" >> $GITHUB_ENV
+          else
+              echo "update_layer=false" >> $GITHUB_ENV
+          fi
+
+      - name: Build SAM application
+        run: |
+          if [ "${{ env.update_layer }}" = "true" ]; then
+              echo "Rebuilding SAM application with updated layer..."
+              sam build
+          else
+              echo "Skipping SAM build as layer hasn't changed."
+          fi
+
+      - name: Deploy SAM application
+        run: |
+          sam deploy --no-confirm-changeset \
+            --stack-name lambda-sam-stack \
+            --capabilities CAPABILITY_IAM \
+            --region ${{ secrets.AWS_REGION }}
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

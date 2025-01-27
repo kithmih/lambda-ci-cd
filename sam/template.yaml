@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Lambda function with SAM and Layers
+
+Globals:
+  Function:
+    Timeout: 10
+    Environment:
+      Variables:
+        ENV_MESSAGE: "Hello from AWS Serverless Application Model!"
+
+Resources:
+  LambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: MyLambdaLayer
+      ContentUri: layer/
+      CompatibleRuntimes:
+        - nodejs16.x
+
+  MyLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: MyLambdaFunction
+      CodeUri: function/
+      Handler: index.handler
+      Runtime: nodejs16.x
+      Layers:
+        - !Ref LambdaLayer
+      Environment:
+        Variables:
+          ENV_VAR: "value"

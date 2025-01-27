@@ -1,0 +1,13 @@
+{
+    "name": "lambda-function",
+    "version": "1.0.0",
+    "description": "Sample AWS Lambda function",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"No tests yet\""
+    },
+    "dependencies": {
+      "axios": "^1.4.0"
+    }
+  }
+  
